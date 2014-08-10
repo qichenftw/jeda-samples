@@ -1,0 +1,25 @@
+# NetBeans generated project files
+
+build/
+dist/
+
+*/nbproject/*
+!*/nbproject/platform.properties
+!*/nbproject/project.properties
+!*/nbproject/project.xml
+!*/nbproject/suite.properties
+
+*/*/nbproject/*
+!*/*/nbproject/platform.properties
+!*/*/nbproject/project.properties
+!*/*/nbproject/project.xml
+!*/*/nbproject/suite.properties
+
+
+# Android generated files
+
+*/bin/
+*/gen/
+*/libs/
+*/gen/
+*/local.properties
