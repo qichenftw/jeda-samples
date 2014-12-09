@@ -45,7 +45,7 @@ public class ScrollingText extends GraphicsItem implements TickListener, KeyDown
 
     @Override
     public void onKeyDown(KeyEvent event) {
-        action("Menu");
+        getWindow().setPage("Menu");
         posY = 0.0;
     }
 }

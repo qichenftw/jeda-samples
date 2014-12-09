@@ -23,10 +23,8 @@ public class Game extends Program implements ActionListener, TickListener, KeyUp
         "and are available on",
         "the Jeda website."
     };
-    private static Color DISPLAY_BG = new Color(100, 155, 100, 150);
-    private static Color DISPLAY_FG = new Color(100, 255, 100);
-    private Window window;
-    private Image background;
+    private Window view;
+    private Image menuBackground;
     private int asteroidCount = 2;
     private Spaceship spaceship;
     private int score;
@@ -34,35 +32,37 @@ public class Game extends Program implements ActionListener, TickListener, KeyUp
     private Menu menu;
     private Music menuMusic;
     private ScrollingText aboutText;
+    private HUD hud;
 
     @Override
     public void run() {
-        window = new Window(1024, 768, WindowFeature.DOUBLE_BUFFERED);
-        window.setAntiAliasing(true);
+        view = new Window(1024, 768, WindowFeature.DOUBLE_BUFFERED);
+        view.setAntiAliasing(true);
         pressedKeys = new PressedKeys();
-        window.addEventListener(pressedKeys);
+        view.addEventListener(pressedKeys);
 
-        background = new Image("res:drawable/background-menu.jpg");
+        hud = new HUD();
+        menuBackground = new Image("res:drawable/background-menu.jpg");
         initMenu();
+        initAbout();
         menuMusic.play();
-        window.addEventListener(this);
+        view.setPage("Menu");
+        view.addEventListener(this);
 
-        aboutText = new ScrollingText(ABOUT);
     }
 
     @Override
     public void onAction(ActionEvent event) {
         if ("Quit".equals(event.getName())) {
             menuMusic.stop();
-            window.close();
+            view.close();
         }
         else if ("About".equals(event.getName())) {
-            window.remove(menu);
-            window.add(aboutText);
+            view.setPage("About");
         }
-        else if ("Menu".equals(event.getName())) {
-            window.remove(aboutText);
-            window.add(menu);
+        else if ("Start Game".equals(event.getName())) {
+            menuMusic.stop();
+            startGame();
         }
     }
 
@@ -70,67 +70,70 @@ public class Game extends Program implements ActionListener, TickListener, KeyUp
     public void onKeyUp(KeyEvent event) {
         // Cheat for testing
         if (event.getKey() == Key.P) {
-            for (Asteroid asteroid : window.getGraphicsItems(Asteroid.class)) {
-                window.remove(asteroid);
+            for (Asteroid asteroid : view.getElements(Asteroid.class)) {
+                view.remove(asteroid);
             }
         }
     }
 
     @Override
     public void onTick(TickEvent event) {
+        if (view.getPage().equals("Game") && view.getElements(Asteroid.class).length == 0) {
+            asteroidCount = asteroidCount + 2;
+            addAsteroids(asteroidCount);
+        }
 
-//        spaceship.steer(pressedKeys);
-//        if (window.getGraphicsItems(Asteroid.class).length == 0) {
-//            asteroidCount = asteroidCount + 2;
-//            addAsteroids(asteroidCount);
-//        }
-        window.drawImage(0, 0, background);
-        window.setColor(DISPLAY_BG);
-        window.fillRectangle(5, 5, 150, 40);
-        window.setColor(DISPLAY_FG);
-        window.drawRectangle(5, 5, 150, 40);
-        window.setFontSize(30);
-        window.drawText(10, 10, "Score: " + score);
+        view.drawImage(0, 0, menuBackground);
     }
 
     int getSpaceHeight() {
-        return window.getHeight();
+        return view.getHeight();
     }
 
     int getSpaceWidth() {
-        return window.getWidth();
+        return view.getWidth();
     }
 
     void addScore(int amount) {
         score = score + amount;
+        hud.setScore(this.score);
+    }
+
+    private void initAbout() {
+        view.setPage("About");
+        view.add(new ImageWidget(0, 0, menuBackground));
+        aboutText = new ScrollingText(ABOUT);
+        view.add(aboutText);
     }
 
     private void initMenu() {
+        view.setPage("Menu");
+        view.add(new ImageWidget(0, 0, menuBackground));
         menuMusic = new Music("res:raw/glowsphere.mp3");
-        menu = new Menu(window.getWidth() / 2, 300, Alignment.CENTER);
+        menu = new Menu(view.getWidth() / 2, 300, Alignment.CENTER);
         menu.addOption("Start Game");
         menu.addOption("About");
         menu.addOption("Quit");
-        window.add(menu);
-
+        view.add(menu);
     }
 
     private void startGame() {
-        spaceship = new Spaceship(window.getWidth() / 2, window.getHeight() / 2);
-        window.add(spaceship);
-        asteroidCount = 2;
-        addAsteroids(asteroidCount);
+        view.setPage("Game");
+        spaceship = new Spaceship(view.getWidth() / 2, view.getHeight() / 2);
+        view.add(spaceship);
+        view.add(hud);
+        asteroidCount = 0;
     }
 
     private void addAsteroids(int count) {
         while (count > 0) {
-            int x = Util.randomInt(window.getWidth());
-            int y = Util.randomInt(window.getHeight());
+            int x = Util.randomInt(view.getWidth());
+            int y = Util.randomInt(view.getHeight());
             double dx = x - spaceship.getX();
             double dy = y - spaceship.getY();
             // Abstand Asteroid - Raumschiff mindestens 150
             if (dx * dx + dy * dy > 150 * 150) {
-                window.add(new Asteroid(this, x, y));
+                view.add(new Asteroid(this, x, y));
                 count = count - 1;
             }
         }

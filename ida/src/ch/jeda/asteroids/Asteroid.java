@@ -4,7 +4,7 @@ import ch.jeda.*;
 
 public class Asteroid extends Body {
 
-    private static Sound BREAK_SOUND = new Sound("res:raw/explosion.wav");
+//    private static Sound BREAK_SOUND = new Sound("res:raw/explosion.wav");
     private static int[] RADII = {22, 45, 100};
     private Game game;
     private int size;
@@ -15,7 +15,7 @@ public class Asteroid extends Body {
     }
 
     public Asteroid(Game game, double x, double y, double speed, double direction, int size) {
-        super(x, y, speed, direction);
+        super(x, y, 0, direction);
         this.game = game;
         stability = 30 * (size + 1);
         this.size = size;
@@ -31,15 +31,15 @@ public class Asteroid extends Body {
     }
 
     private void breakUp() {
-        BREAK_SOUND.play();
+//        BREAK_SOUND.play();
         game.addScore(size + 1);
         if (size > 0) {
             double dir = getDirection() + Math.random() * Math.PI / 2.0 - Math.PI / 4.0;
             double speed = getSpeed() * 1.2f;
-            getWindow().add(new Asteroid(game, getX(), getY(), speed, dir + Math.PI / 4, size - 1));
-            getWindow().add(new Asteroid(game, getX(), getY(), speed, dir - Math.PI / 4, size - 1));
+            getView().add(new Asteroid(game, getX(), getY(), speed, dir + Math.PI / 4, size - 1));
+            getView().add(new Asteroid(game, getX(), getY(), speed, dir - Math.PI / 4, size - 1));
         }
 
-        getWindow().remove(this);
+        getView().remove(this);
     }
 }

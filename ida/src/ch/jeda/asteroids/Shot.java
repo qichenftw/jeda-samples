@@ -9,8 +9,8 @@ public class Shot extends Body {
     public Shot(int x, int y, double direction) {
         super(x, y, 200, direction);
         Image image = new Image("res:drawable/laser.png");
-        setImage(image, 36);
-        setRadius(image.getWidth() / 2);
+        setImage(image);
+        setRadius(image.getWidth() / 2 - 10);
         setDrawOrder(100);
         age = 0;
     }
@@ -20,12 +20,12 @@ public class Shot extends Body {
         super.update(dt, newX, newY);
         for (Asteroid asteroid : getCollidingSprites(Asteroid.class)) {
             asteroid.hit();
-            getWindow().remove(this);
+            getView().remove(this);
         }
 
         age = age + dt;
         if (age > 2.0) {
-            getWindow().remove(this);
+            getView().remove(this);
         }
 
     }
