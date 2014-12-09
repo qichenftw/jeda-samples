@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="200" height="10" tilewidth="70" tileheight="70" backgroundcolor="#26b0e1">
+ <tileset firstgid="1" name="base_tiles" tilewidth="70" tileheight="70">
+  <image source="base_tiles.png" width="840" height="630"/>
+  <terraintypes>
+   <terrain name="Blocked" tile="-1"/>
+  </terraintypes>
+  <tile id="0" terrain=",,,0">
+   <objectgroup draworder="index">
+    <object x="0.750688" y="70.0007" rotation="-0.00115036">
+     <polygon points="0,0 69.5,-0.25 69.25,-69.5"/>
+    </object>
+   </objectgroup>
+  </tile>
+  <tile id="1" terrain=",,0,"/>
+  <tile id="2" terrain="0,0,,"/>
+  <tile id="12" terrain="0,0,0,0"/>
+  <tile id="13" terrain="0,0,0,0"/>
+ </tileset>
+ <tileset firstgid="109" name="player" tilewidth="72" tileheight="97">
+  <image source="res/drawable/player.png" width="72" height="97"/>
+  <tile id="0">
+   <properties>
+    <property name="name" value="Spieler"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Background" width="200" height="10">
+  <data encoding="base64" compression="zlib">
+   eJzt1jEKACAMA0AHdXf1/w/VDxS7CeUOsmXoUkhrQKTfjJv5+xAAgKIye8smAwCIrUcyfahqP5LpQ1X+A2IHAzgDrw==
+  </data>
+ </layer>
+ <objectgroup name="Objekte">
+  <object name="Player" gid="109" x="273" y="494"/>
+ </objectgroup>
+</map>

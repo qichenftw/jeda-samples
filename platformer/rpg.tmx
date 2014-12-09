@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="20" height="10" tilewidth="64" tileheight="64">
+ <tileset firstgid="1" source="RPGpack_sheet.tsx"/>
+ <layer name="Boden" width="20" height="10">
+  <data encoding="base64" compression="zlib">
+   eJwTY2BgEBvFgxazAfEyJD6IzQ7EHETqB6mVhtIgLAflo2NZJDUwjM08fQrwQIclORgAWfcTXw==
+  </data>
+ </layer>
+ <layer name="Gebäude 1" width="20" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFIOAExeSADCxmhQJxOJlmBqPxs9DwKKAfAADfIgQY
+  </data>
+ </layer>
+ <layer name="Gebäude 2" width="20" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYKAPqAbiGjSxs2g0OhsXqAfifiCeAGXDwEM0+iwSG10/MqgD4sVAvATKRgankWiQWSexmFeLhX8IipHlQO65DzXjPtTMu1jMO4BF7DAUIwOY32Bm3Meij97gCRBfwIGHIgAA+tIhjA==
+  </data>
+ </layer>
+ <layer name="Kachelebene 4" width="20" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AU4AIAAyAAAQ==
+  </data>
+ </layer>
+ <objectgroup color="#ff0000" name="Objektebene 1" width="20" height="10">
+  <properties>
+   <property name="test" value="42"/>
+  </properties>
+  <object x="696" y="120" width="60" height="53"/>
+  <object x="316" y="194" width="259" height="193"/>
+  <object x="705" y="339" width="60" height="49"/>
+  <object x="277" y="90">
+   <polygon points="0,0 -113,142 -76,248 39,296 108,158 177,-15 -20,-49 3,-17 8,-16 87,12"/>
+  </object>
+  <object x="1185" y="63">
+   <polyline points="0,0 -124,51 -112,160 -283,231 -282,308 -283,304 -3,138 -1,138 47,13"/>
+  </object>
+  <object x="857" y="305">
+   <polygon points="0,0 -113,142 -76,248 39,296 108,158 177,-15 -20,-49 3,-17 8,-16 87,12"/>
+  </object>
+  <object x="827" y="45" width="128" height="97">
+   <ellipse/>
+  </object>
+ </objectgroup>
+</map>
