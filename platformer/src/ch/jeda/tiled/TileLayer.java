@@ -18,6 +18,7 @@ package ch.jeda.tiled;
 
 import ch.jeda.Data;
 import ch.jeda.ui.Canvas;
+import ch.jeda.ui.Color;
 import ch.jeda.ui.Image;
 
 public final class TileLayer extends Layer {
@@ -39,13 +40,23 @@ public final class TileLayer extends Layer {
         return null;
     }
 
-    Image getTileImage(final int x, final int y) {
+    public Tile getTile(final int x, final int y) {
         final int index = x + y * this.width;
         if (0 <= index && index < this.tiles.length && this.tiles[index] != null) {
-            return this.tiles[index].getImage();
+            return this.tiles[index];
         }
 
         return null;
+    }
+
+    Image getTileImage(final int x, final int y) {
+        final Tile tile = this.getTile(x, y);
+        if (tile == null) {
+            return null;
+        }
+        else {
+            return tile.getImage();
+        }
     }
 
     @Override
@@ -57,8 +68,8 @@ public final class TileLayer extends Layer {
         final int alpha = (int) (this.getOpacity() * 255);
         final int tileHeight = this.getMap().getTileHeight();
         final int tileWidth = this.getMap().getTileWidth();
-        int screenX = this.getX();
-        int screenY = this.getY();
+        int screenX = this.getMap().getOffsetX();
+        int screenY = this.getMap().getOffsetY();
         int startX = 0;
         int startY = 0;
         int endX = this.width;
@@ -69,7 +80,46 @@ public final class TileLayer extends Layer {
                 screenY += tileHeight;
             }
 
-            screenY = this.getY();
+            screenY = this.getMap().getOffsetY();
+            screenX += tileWidth;
+        }
+
+        drawDebugOverlay(canvas);
+    }
+
+    private void drawDebugOverlay(final Canvas canvas) {
+        canvas.setColor(Color.RED);
+        final int tileHeight = this.getMap().getTileHeight();
+        final int tileWidth = this.getMap().getTileWidth();
+        int screenX = this.getMap().getOffsetX();
+        int screenY = this.getMap().getOffsetY();
+        int startX = 0;
+        int startY = 0;
+        int endX = this.width;
+        int endY = this.height;
+        for (int x = startX; x < endX; ++x) {
+            for (int y = startY; y < endY; ++y) {
+                final Tile tile = this.getTile(x, y);
+                if (tile != null && tile.getTerrainTopLeft() != null) {
+                    canvas.fillRectangle(screenX, screenY, 5, 5);
+                }
+
+                if (tile != null && tile.getTerrainTopRight() != null) {
+                    canvas.fillRectangle(screenX + tileWidth - 5, screenY, 5, 5);
+                }
+
+                if (tile != null && tile.getTerrainBottomLeft() != null) {
+                    canvas.fillRectangle(screenX, screenY + tileHeight - 5, 5, 5);
+                }
+
+                if (tile != null && tile.getTerrainBottomRight() != null) {
+                    canvas.fillRectangle(screenX + tileWidth - 5, screenY + tileHeight - 5, 5, 5);
+                }
+
+                screenY += tileHeight;
+            }
+
+            screenY = this.getMap().getOffsetY();
             screenX += tileWidth;
         }
     }

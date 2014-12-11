@@ -13,10 +13,10 @@ public class Kompass extends Program implements SensorListener {
     @Override
     public void run() {
         fenster = new Window();
-        fenster.setFontSize(12);
+        fenster.setTextSize(12);
         cx = fenster.getWidth() / 2;
         cy = fenster.getHeight() / 2;
-        fenster.setFontSize(20);
+        fenster.setTextSize(20);
         fenster.setLineWidth(3);
         if (Jeda.isSensorAvailable(SensorType.MAGNETIC_FIELD)) {
             Jeda.enableSensor(SensorType.MAGNETIC_FIELD);

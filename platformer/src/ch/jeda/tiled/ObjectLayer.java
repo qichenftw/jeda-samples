@@ -19,7 +19,6 @@ package ch.jeda.tiled;
 import ch.jeda.Data;
 import ch.jeda.ui.Canvas;
 import ch.jeda.ui.Color;
-import ch.jeda.ui.Window;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,6 +36,8 @@ public class ObjectLayer extends Layer {
         this.objectsByName = new HashMap<String, TiledObject>();
         for (int i = 0; i < this.objects.length; ++i) {
             this.objectsByName.put(objects[i].getName(), objects[i]);
+            objects[i].layer = this;
+            this.add(objects[i]);
         }
     }
 
@@ -51,13 +52,5 @@ public class ObjectLayer extends Layer {
     @Override
     public TiledObject getObject(final String name) {
         return this.objectsByName.get(name);
-    }
-
-    @Override
-    void init(final Window window) {
-        for (int i = 0; i < this.objects.length; ++i) {
-            window.add(this.objects[i]);
-            objects[i].setDrawOrder(this.getDrawOrder());
-        }
     }
 }

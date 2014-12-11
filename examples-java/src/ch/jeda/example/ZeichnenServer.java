@@ -5,27 +5,29 @@ import ch.jeda.*;
 import ch.jeda.event.*;
 import ch.jeda.ui.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class ZeichnenServer extends Program implements TickListener {
+public class ZeichnenServer extends Program implements ServerListener {
 
     Window fenster;
-    NetworkServer server;
-    List<NetworkSocket> sockets;
-    List<Color> clientColors;
+    TcpServer server;
+    List<Connection> connections;
+    Map<Connection, Color> clientColors;
     List<Color> availableColors;
 
     @Override
     public void run() {
-        sockets = new ArrayList<NetworkSocket>();
-        clientColors = new ArrayList<Color>();
+        connections = new ArrayList<Connection>();
+        clientColors = new HashMap<Connection, Color>();
         availableColors = new ArrayList<Color>();
         availableColors.add(Color.RED);
         availableColors.add(Color.GREEN);
         availableColors.add(Color.BLUE);
         availableColors.add(Color.BLACK);
         availableColors.add(Color.JEDA);
-        server = new NetworkServer();
+        server = new TcpServer();
         server.start(1248);
         fenster = new Window();
         fenster.addEventListener(this);
@@ -33,37 +35,32 @@ public class ZeichnenServer extends Program implements TickListener {
     }
 
     @Override
-    public void onTick(TickEvent event) {
-        if (server.hasNewConnection() && !availableColors.isEmpty()) {
-            NetworkSocket newClient = server.acceptNewConnection();
-            Color newColor = availableColors.get(0);
-            availableColors.remove(0);
-            sockets.add(newClient);
-            clientColors.add(newColor);
-            Data data = new Data();
-            data.writeObject("color", newColor);
-            newClient.sendData(data);
-        }
-
-        for (int i = 0; i < sockets.size(); ++i) {
-            handleClient(sockets.get(i), clientColors.get(i));
-        }
+    public void onConnectionAccepted(ConnectionEvent event) {
+        Connection newConnection = event.getConnection();
+        Color newColor = availableColors.get(0);
+        availableColors.remove(0);
+        connections.add(newConnection);
+        clientColors.put(newConnection, newColor);
+        Data data = new Data();
+        data.writeObject("color", newColor);
+        newConnection.sendData(data);
     }
 
-    void handleClient(NetworkSocket socket, Color color) {
-        if (!socket.isConnected()) {
-            sockets.remove(socket);
-            availableColors.add(color);
-        }
+    @Override
+    public void onConnectionClosed(ConnectionEvent event) {
+        connections.remove(event.getConnection());
+        availableColors.add(clientColors.get(event.getConnection()));
+        clientColors.remove(event.getConnection());
+    }
 
-        while (socket.hasData()) {
-            Data data = socket.receiveData();
-            int x = data.readInt("x", -100);
-            int y = data.readInt("y", -100);
-            if (x >= 0 && y >= 0) {
-                fenster.setColor(color);
-                fenster.fillCircle(x, y, 5);
-            }
+    @Override
+    public void onMessageReceived(MessageEvent event) {
+        int x = event.getData().readInt("x", -100);
+        int y = event.getData().readInt("y", -100);
+        Color color = clientColors.get(event.getConnection());
+        if (x >= 0 && y >= 0) {
+            fenster.setColor(color);
+            fenster.fillCircle(x, y, 5);
         }
     }
 }

@@ -19,9 +19,12 @@ package ch.jeda.tiled;
 final class TmxObjectElement extends TmxElement<TiledObject> {
 
     private static final String GID = "gid";
+    private static final String HEIGHT = "height";
     private static final String NAME = "name";
+    private static final String ROTATION = "rotation";
     private static final String TYPE = "type";
     private static final String VISIBLE = "visible";
+    private static final String WIDTH = "width";
     private static final String X = "x";
     private static final String Y = "y";
 
@@ -29,23 +32,35 @@ final class TmxObjectElement extends TmxElement<TiledObject> {
         return this.getIntAttribute(GID);
     }
 
+    double getHeight() {
+        return this.getDoubleAttribute(HEIGHT, 0.0);
+    }
+
     String getName() {
         return this.getStringAttribute(NAME);
+    }
+
+    public double getRotation() {
+        return Math.toRadians(this.getDoubleAttribute(ROTATION, 0.0));
     }
 
     String getType() {
         return this.getStringAttribute(TYPE);
     }
 
+    double getWidth() {
+        return this.getDoubleAttribute(WIDTH, 0.0);
+    }
+
+    double getX() {
+        return this.getDoubleAttribute(X);
+    }
+
+    double getY() {
+        return this.getDoubleAttribute(Y);
+    }
+
     boolean isVisible() {
-        return this.getBooleanAttribute(VISIBLE);
-    }
-
-    int getX() {
-        return this.getIntAttribute(X);
-    }
-
-    int getY() {
-        return this.getIntAttribute(Y);
+        return this.getBooleanAttribute(VISIBLE, true);
     }
 }

@@ -4,6 +4,13 @@ import ch.jeda.*;
 import ch.jeda.event.*;
 import ch.jeda.tiled.*;
 import ch.jeda.ui.*;
+import org.jbox2d.collision.shapes.CircleShape;
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.FixtureDef;
+import org.jbox2d.dynamics.World;
 
 public class Platformer extends Program implements TickListener, KeyDownListener, KeyUpListener {
 
@@ -21,6 +28,8 @@ public class Platformer extends Program implements TickListener, KeyDownListener
     boolean amBoden; // Ist die Spielfigur am Boden?
     TiledMap level;
     TiledObject player;
+    World world;
+    Body body;
 
     @Override
     public void run() {
@@ -30,16 +39,41 @@ public class Platformer extends Program implements TickListener, KeyDownListener
         vx = 0;
         vy = 0;
         amBoden = true;
-        fenster.addEventListener(this);
         player = level.getLayer("Objekte").getObject("Player");
-        level.init(fenster);
+        fenster.add(level);
+        level.setScrollLock(player);
+        initBody();
+        fenster.addEventListener(this);
+    }
+
+    void initBody() {
+        world = new World(new Vec2(0.0f, 10.0f));
+
+        BodyDef bd = new BodyDef();
+        bd.position.set((float) player.getX(), (float) player.getY());
+        bd.type = BodyType.DYNAMIC;
+
+        CircleShape cs = new CircleShape();
+        cs.m_radius = 0.5f;
+
+        FixtureDef fd = new FixtureDef();
+        fd.shape = cs;
+        fd.density = 0.5f;
+        fd.friction = 0.3f;
+        fd.restitution = 0.5f;
+
+        body = world.createBody(bd);
+        body.createFixture(fd);
+
     }
 
     @Override
     public void onTick(TickEvent event) {
         steuereSpielfigur();
-        bewegeSpielfigur(event.getDuration());
-        zeichneHintergrund();
+        world.step((float) event.getDuration(), 6, 2);
+        Vec2 pos = body.getPosition();
+        player.setPosition(pos.x, pos.y);
+        //bewegeSpielfigur(event.getDuration());
     }
 
     void steuereSpielfigur() {
@@ -67,21 +101,14 @@ public class Platformer extends Program implements TickListener, KeyDownListener
     }
 
     void bewegeSpielfigur(double dt) {
-        double x = player.getCenterX();
-        double y = player.getCenterY();
-        // Merke alte y-Position
-        double oldY = y;
+        double x = player.getX();
+        double y = player.getY();
 
         // Gravitation
         vy = vy + G * dt;
         // Bewege Spielfigur
         x = x + vx * dt;
         y = y + vy * dt;
-
-        // Verhindere, dass Spielfigur über linken Rand hinausläuft.
-        if (x < r) {
-            x = r;
-        }
 
         // Verhindere, dass Spielfigur über rechten Rand hinausläuft.
         if (x > fenster.getWidth() - r - 1) {
@@ -108,12 +135,6 @@ public class Platformer extends Program implements TickListener, KeyDownListener
         }
 
         player.setPosition(x, y);
-    }
-
-    void zeichneHintergrund() {
-        level.drawBackground(fenster);
-        fenster.setColor(Color.RED);
-        fenster.drawText(10, 10, "x=" + player.getCenterX() + ", y=" + player.getCenterY());
     }
 
     @Override

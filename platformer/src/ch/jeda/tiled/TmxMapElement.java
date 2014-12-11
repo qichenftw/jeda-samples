@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import org.xml.sax.SAXException;
 
+// TODO: Add renderorder
 class TmxMapElement extends TmxElementWithProperties<TiledMapData> {
 
     private static final String BACKGROUNDCOLOR = "backgroundcolor";

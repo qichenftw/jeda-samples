@@ -56,7 +56,7 @@ public class CuteMaze extends Program implements TickListener, KeyDownListener {
                 player.move(Direction.SOUTH);
                 break;
             case LEFT:
-                player.move(Direction.WEST);
+                player.move(Direction.WEST, world.getHeightAt(0, 0));
                 break;
             case RIGHT:
                 player.move(Direction.EAST);

@@ -1,0 +1,8 @@
+#!/bin/bash
+
+convert $1 -crop 448x256+0+0 +repage spellcast.png
+convert $1 -crop 512x256+0+256 +repage stab.png
+convert $1 -crop 576x256+0+512 +repage walk.png
+convert $1 -crop 384x256+0+768 +repage slash.png
+convert $1 -crop 832x256+0+1024 +repage shoot.png
+convert $1 -crop 384x64+0+1280 +repage hurt.png

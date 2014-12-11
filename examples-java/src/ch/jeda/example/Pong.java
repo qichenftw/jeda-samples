@@ -84,7 +84,7 @@ public class Pong extends Program implements TickListener,
         // Rechter Schläger zeichnen
         fenster.fillRectangle(w - paddleWidth, rightPaddleY - paddleRadius, paddleWidth, 2 * paddleRadius);
         // Punkte zeichnen
-        fenster.setFontSize(20);
+        fenster.setTextSize(20);
         fenster.drawText(paddleWidth + 10, 10, String.valueOf(leftPoints));
         fenster.drawText(w - paddleWidth - 10, 10, String.valueOf(rightPoints), Alignment.RIGHT);
     }

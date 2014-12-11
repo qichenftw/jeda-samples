@@ -54,6 +54,8 @@ class TmxContentHandler<T> implements ContentHandler {
         this.elementClassMap.put("objectgroup", TmxObjectGroupElement.class);
         this.elementClassMap.put("properties", TmxPropertiesElement.class);
         this.elementClassMap.put("property", TmxPropertyElement.class);
+        this.elementClassMap.put("terrain", TmxTerrainElement.class);
+        this.elementClassMap.put("terraintypes", TmxTerrainTypesElement.class);
         this.elementClassMap.put("tile", TmxTileElement.class);
         this.elementClassMap.put("tileoffset", TmxTileOffsetElement.class);
         this.elementClassMap.put("tileset", TmxTileSetElement.class);

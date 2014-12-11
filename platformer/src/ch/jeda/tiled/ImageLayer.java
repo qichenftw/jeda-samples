@@ -41,6 +41,7 @@ public final class ImageLayer extends Layer {
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawImage(this.getX(), this.getY(), this.image, (int) (this.getOpacity() * 255));
+        canvas.drawImage(this.getMap().getOffsetX(), this.getMap().getOffsetY(),
+                         this.image, (int) (this.getOpacity() * 255));
     }
 }

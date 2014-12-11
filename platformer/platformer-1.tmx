@@ -4,18 +4,32 @@
   <image source="base_tiles.png" width="840" height="630"/>
   <terraintypes>
    <terrain name="Blocked" tile="-1"/>
+   <terrain name="Half" tile="-1"/>
   </terraintypes>
   <tile id="0" terrain=",,,0">
    <objectgroup draworder="index">
     <object x="0.750688" y="70.0007" rotation="-0.00115036">
-     <polygon points="0,0 69.5,-0.25 69.25,-69.5"/>
+     <polygon points="-0.49999,-0.50001 69.5,-0.25 69.25,-70.25"/>
     </object>
    </objectgroup>
   </tile>
   <tile id="1" terrain=",,0,"/>
   <tile id="2" terrain="0,0,,"/>
+  <tile id="3" terrain="0,0,,"/>
+  <tile id="4" terrain="0,0,,"/>
+  <tile id="5" terrain="0,0,,"/>
   <tile id="12" terrain="0,0,0,0"/>
   <tile id="13" terrain="0,0,0,0"/>
+  <tile id="14" terrain="0,0,0,0"/>
+  <tile id="15" terrain="0,0,0,0"/>
+  <tile id="16" terrain="0,0,0,0"/>
+  <tile id="17" terrain="0,0,0,0"/>
+  <tile id="24" terrain="0,0,0,0"/>
+  <tile id="25" terrain="0,0,0,0"/>
+  <tile id="26" terrain="0,0,,0"/>
+  <tile id="27" terrain="0,0,,0"/>
+  <tile id="28" terrain="0,0,0,"/>
+  <tile id="29" terrain="0,0,0,"/>
  </tileset>
  <tileset firstgid="109" name="player" tilewidth="72" tileheight="97">
   <image source="res/drawable/player.png" width="72" height="97"/>
@@ -27,10 +41,10 @@
  </tileset>
  <layer name="Background" width="200" height="10">
   <data encoding="base64" compression="zlib">
-   eJzt1jEKACAMA0AHdXf1/w/VDxS7CeUOsmXoUkhrQKTfjJv5+xAAgKIye8smAwCIrUcyfahqP5LpQ1X+A2IHAzgDrw==
+   eJzt1iEOgDAQBMCSAA6B7f8fSqtQpXVHLjPJuhNrNrlSgJG95Wg5o4sAACS18m/5yeC1RReAn+rbuKJLQJB7kr6NOrmHrOpivu4hK/uAsQcCBARN
   </data>
  </layer>
  <objectgroup name="Objekte">
-  <object name="Player" gid="109" x="273" y="494"/>
+  <object name="Player" gid="109" x="265" y="492" width="70" height="100"/>
  </objectgroup>
 </map>

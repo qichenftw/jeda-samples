@@ -3,7 +3,7 @@ package ch.jeda.asteroids;
 import ch.jeda.*;
 import ch.jeda.ui.*;
 
-public class HUD extends GraphicsItem {
+public class HUD extends Element {
 
     private static final Color DISPLAY_BG = new Color(100, 155, 100, 150);
     private static final Color DISPLAY_FG = new Color(100, 255, 100);
@@ -19,7 +19,7 @@ public class HUD extends GraphicsItem {
         canvas.fillRectangle(5, 5, 150, 40);
         canvas.setColor(DISPLAY_FG);
         canvas.drawRectangle(5, 5, 150, 40);
-        canvas.setFontSize(30);
+        canvas.setTextSize(30);
         canvas.drawText(10, 10, "Score: " + score);
     }
 

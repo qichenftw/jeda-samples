@@ -15,7 +15,7 @@ public class Schneefall extends Program implements TickListener {
 
     @Override
     public void run() {
-        fenster = new Window(WindowFeature.ORIENTATION_LANDSCAPE);
+        fenster = new Window(WindowFeature.ORIENTATION_LANDSCAPE, WindowFeature.DOUBLE_BUFFERED);
         // Bild laden
         bild = new Image("res:drawable/background.jpg");
         bild = bild.scale(fenster.getWidth(), fenster.getHeight());

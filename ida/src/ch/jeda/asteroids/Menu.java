@@ -76,7 +76,7 @@ public class Menu extends Widget implements KeyDownListener {
 
     @Override
     protected void draw(Canvas canvas) {
-        canvas.setFontSize(40);
+        canvas.setTextSize(40);
         canvas.setTypeface(Typeface.KENVECTOR_FUTURE);
         int y = getTop();
         for (int i = 0; i < options.size(); ++i) {

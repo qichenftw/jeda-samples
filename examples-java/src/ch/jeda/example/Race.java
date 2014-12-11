@@ -33,7 +33,7 @@ class Car extends Sprite implements KeyDownListener, KeyUpListener {
     private boolean brake;
 
     public Car(int x, int y) {
-        setImage("res:drawable/racer_green.png", 360);
+        setImage("res:drawable/racer_green.png");
         setPosition(x, y);
     }
 

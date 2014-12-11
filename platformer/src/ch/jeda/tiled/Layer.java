@@ -17,71 +17,61 @@
 package ch.jeda.tiled;
 
 import ch.jeda.Data;
-import ch.jeda.ui.Element;
-import ch.jeda.ui.Window;
+import ch.jeda.ui.Composite;
 
 /**
  * Represents a layer of a Tiled map.
  *
  * @since 1.6
  */
-public abstract class Layer extends Element {
+public abstract class Layer extends Composite {
 
-    private final String name;
-    private final double opacity;
     private final Data properties;
-    private final boolean visible;
     private TiledMap map;
-    private int x;
-    private int y;
+    private double opacity;
 
     Layer(final Data properties, final String name, final double opacity, final boolean visible) {
-        this.name = name;
-        this.opacity = opacity;
+        super(name);
+        this.setVisible(visible);
+        this.opacity = Math.max(0.0, Math.min(opacity, 1.0));
         this.properties = properties;
-        this.visible = visible;
     }
 
     /**
-     * Returns the name of the layer.
+     * Returns the Tiled object with the specified name in this layer. Returns <tt>null</tt> if there is no object with
+     * the specified name in this layer.
      *
-     * @return the name of the layer
+     * @param name the name of the Tiled object
+     * @return object with the specified name or <tt>null</tt>
      *
      * @since 1.6
      */
-    public final String getName() {
-        return this.name;
-    }
-
     public abstract TiledObject getObject(final String name);
 
+    /**
+     * Returns the current opacity of this layer.
+     *
+     * @return the current opacity of this layer
+     *
+     * @since 1.6
+     */
     public final double getOpacity() {
         return this.opacity;
     }
 
+    /**
+     * Returns the properties of this layer.
+     *
+     * @return the properties of this layer
+     *
+     * @since 1.6
+     */
     public final Data getProperties() {
         return this.properties;
     }
 
-    public final int getX() {
-        return this.x;
-    }
-
-    public final int getY() {
-        return this.y;
-    }
-
-    public final boolean isVisible() {
-        return this.visible;
-    }
-
-    public final void move(final int dx, final int dy) {
-        this.x = this.x + dx;
-        this.y = this.y + dy;
-    }
-
-    void init(final Window window) {
-        window.add(this);
+    public void setOpacity(final double opacity) {
+        this.opacity = Math.max(0.0, Math.min(opacity, 1.0));
     }
 
     TiledMap getMap() {

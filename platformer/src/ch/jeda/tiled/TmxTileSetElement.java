@@ -21,7 +21,9 @@ import ch.jeda.ui.Image;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.xml.sax.SAXException;
 
 class TmxTileSetElement extends TmxElementWithProperties<TileSet> {
@@ -34,20 +36,28 @@ class TmxTileSetElement extends TmxElementWithProperties<TileSet> {
     private static final String TILEWIDTH = "tilewidth";
     private static final String SPACING = "spacing";
     private Image image;
-    private int offsetX;
-    private int offsetY;
+    private TmxTerrainTypesElement terrainTypes;
+    private TmxTileOffsetElement tileOffset;
+    private final Map<Integer, TmxTileElement> tileElements;
 
     TmxTileSetElement() {
+        this.tileElements = new HashMap<Integer, TmxTileElement>();
     }
 
     @Override
     void addChild(final TmxElement element) throws SAXException {
-        if (element instanceof TmxImageElement) {
+        if (element instanceof TmxTileElement) {
+            final TmxTileElement tileElement = (TmxTileElement) element;
+            this.tileElements.put(tileElement.getId(), tileElement);
+        }
+        else if (element instanceof TmxImageElement) {
             this.image = ((TmxImageElement) element).create();
         }
         else if (element instanceof TmxTileOffsetElement) {
-            this.offsetX = ((TmxTileOffsetElement) element).getX();
-            this.offsetY = ((TmxTileOffsetElement) element).getY();
+            this.tileOffset = (TmxTileOffsetElement) element;
+        }
+        else if (element instanceof TmxTerrainTypesElement) {
+            this.terrainTypes = (TmxTerrainTypesElement) element;
         }
         else {
             super.addChild(element);
@@ -83,13 +93,16 @@ class TmxTileSetElement extends TmxElementWithProperties<TileSet> {
         final int spacing = this.getIntAttribute(SPACING);
 
         final List<Tile> tiles = new ArrayList<Tile>();
+        final List<Terrain> terrains = this.createTerrainList();
+        final Map<String, Terrain> terrainMap = new HashMap<String, Terrain>();
 
         int nextX = margin;
         int nextY = margin;
 
         while (nextY + tileHeight + margin <= this.image.getHeight()) {
             final Image tileImage = this.image.subImage(nextX, nextY, tileWidth, tileHeight);
-            tiles.add(new Tile(new Data(), tiles.size(), tileImage));
+            final int tileId = tiles.size();
+            tiles.add(this.createTile(tileImage, tileId, this.tileElements.get(tileId), terrains));
 
             nextX += tileWidth + spacing;
             if (nextX + tileWidth + margin > this.image.getWidth()) {
@@ -98,10 +111,57 @@ class TmxTileSetElement extends TmxElementWithProperties<TileSet> {
             }
         }
 
-        return new TileSet(this.createData(), name, tileWidth, tileHeight, this.offsetX, this.offsetY, tiles);
+        int offsetX = 0;
+        int offsetY = 0;
+        if (tileOffset != null) {
+            offsetX = this.tileOffset.getX();
+            offsetY = this.tileOffset.getY();
+        }
+
+        return new TileSet(this.createData(), name, tileWidth, tileHeight, offsetX, offsetY, tiles);
     }
 
     int getFirstGlobalId() {
         return this.getIntAttribute(FIRSTGID);
+    }
+
+    List<Terrain> createTerrainList() {
+        final List<Terrain> result = new ArrayList<Terrain>();
+        if (this.terrainTypes != null) {
+            for (final TmxTerrainElement element : this.terrainTypes.getTerrains()) {
+                result.add(new Terrain(element.getName()));
+            }
+        }
+
+        return result;
+    }
+
+    Tile createTile(final Image tileImage, final int id, final TmxTileElement element, final List<Terrain> terrainList) {
+        Data properties = new Data();
+        Terrain[] terrains = new Terrain[4];
+        if (element != null) {
+            properties = element.createData();
+            // Parse terrain info of tile
+            final String terrainInfo = element.getTerrain();
+            if (terrainInfo != null) {
+                String[] parts = terrainInfo.split(",");
+                int i = 0;
+                while (i < 4 && i < parts.length) {
+                    try {
+                        int terrainId = Integer.parseInt(parts[i]);
+                        if (0 <= terrainId && terrainId < terrainList.size()) {
+                            terrains[i] = terrainList.get(terrainId);
+                        }
+                    }
+                    catch (final NumberFormatException ex) {
+                        // ignore
+                    }
+
+                    ++i;
+                }
+            }
+        }
+
+        return new Tile(properties, id, tileImage, terrains);
     }
 }

@@ -20,7 +20,7 @@ import ch.jeda.Data;
 import ch.jeda.JedaInternal;
 import ch.jeda.ui.Canvas;
 import ch.jeda.ui.Color;
-import ch.jeda.ui.Window;
+import ch.jeda.ui.Composite;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,11 +29,13 @@ import java.util.Map;
  *
  * @since 1.6
  */
-public final class TiledMap {
+public final class TiledMap extends Composite {
 
     private final TiledMapData mapData;
     private final Map<String, Layer> layersByName;
     private TiledObject scrollLock;
+    private int offsetX;
+    private int offsetY;
 
     public TiledMap(final String path) {
         final TmxReader reader = new TmxReader(new Context());
@@ -41,6 +43,7 @@ public final class TiledMap {
         this.layersByName = new HashMap<String, Layer>();
         for (final Layer layer : this.mapData.layers) {
             this.layersByName.put(layer.getName(), layer);
+            this.add(layer);
         }
 
         int drawOrder = 10000;
@@ -48,17 +51,6 @@ public final class TiledMap {
             this.mapData.layers.get(i).setMap(this);
             this.mapData.layers.get(i).setDrawOrder(drawOrder);
             ++drawOrder;
-        }
-    }
-
-    public void drawBackground(final Canvas canvas) {
-        canvas.setColor(this.mapData.backgroundColor);
-        canvas.fill();
-    }
-
-    public void init(final Window window) {
-        for (final Layer layer : this.mapData.layers) {
-            layer.init(window);
         }
     }
 
@@ -103,6 +95,14 @@ public final class TiledMap {
         return this.mapData.properties;
     }
 
+    public int getOffsetX() {
+        return this.offsetX;
+    }
+
+    public int getOffsetY() {
+        return this.offsetY;
+    }
+
     public int getTileHeight() {
         return this.mapData.tileHeight;
     }
@@ -115,9 +115,28 @@ public final class TiledMap {
         return this.mapData.width;
     }
 
-    public void move(final double dx, final double dy) {
-        for (int i = 0; i < this.mapData.layers.size(); ++i) {
-            this.mapData.layers.get(i).move((int) dx, (int) dy);
+    public void setScrollLock(final TiledObject object) {
+        this.scrollLock = object;
+    }
+
+    @Override
+    protected void draw(final Canvas canvas) {
+        this.checkScrollPos(canvas);
+        canvas.setColor(this.mapData.backgroundColor);
+        canvas.fill();
+    }
+
+    private void checkScrollPos(final Canvas canvas) {
+        int sizeX = this.mapData.width * this.mapData.tileWidth;
+        int sizeY = this.mapData.height * this.mapData.tileHeight;
+        int maxScrollX = sizeX - canvas.getWidth();
+        int maxScrollY = sizeY - canvas.getHeight();
+        if (this.scrollLock != null) {
+            this.offsetX = (int) this.scrollLock.getX() - canvas.getWidth() / 2;
+            this.offsetY = (int) this.scrollLock.getY() - canvas.getHeight() / 2;
         }
+
+        this.offsetX = -Math.max(0, Math.min(maxScrollX, this.offsetX));
+        this.offsetY = -Math.max(0, Math.min(maxScrollY, this.offsetY));
     }
 }

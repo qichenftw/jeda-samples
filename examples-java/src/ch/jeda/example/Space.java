@@ -7,12 +7,12 @@ import ch.jeda.ui.*;
 public class Space extends Program implements TickListener {
 
     Window window;
-    Sprite ship;
+    Ship ship;
     Image background;
 
     @Override
     public void run() {
-        window = new Window();
+        window = new Window(WindowFeature.DOUBLE_BUFFERED);
         ship = new Ship(window.getWidth() / 2, window.getHeight() / 2);
         window.add(ship);
         background = new Image("res:drawable/space.jpg");
@@ -25,16 +25,16 @@ public class Space extends Program implements TickListener {
     }
 }
 
-class Ship extends Sprite implements KeyDownListener, KeyUpListener {
+class Ship extends TopDownSprite implements KeyDownListener, KeyUpListener {
 
     private boolean turnLeft;
     private boolean turnRight;
     private boolean thrustOn;
-    private RotatedImage thrust;
+    private Image thrust;
 
     public Ship(int x, int y) {
-        setImage("res:drawable/ship.png", 36);
-        thrust = new RotatedImage("res:drawable/thrust.png", 36);
+        setImage("res:drawable/ship.png");
+        thrust = new Image("res:drawable/thrust.png");
         setPosition(x, y);
     }
 
@@ -42,9 +42,7 @@ class Ship extends Sprite implements KeyDownListener, KeyUpListener {
     public void draw(Canvas canvas) {
         super.draw(canvas);
         if (thrustOn) {
-            double x = getX() - 50 * (float) Math.cos(getRotation());
-            double y = getY() - 50 * (float) Math.sin(getRotation());
-            canvas.drawImage(x, y, thrust.getImage(getRotation()), Alignment.CENTER);
+            canvas.drawImage(-50, 0, thrust, Alignment.CENTER);
         }
     }
 

@@ -24,11 +24,13 @@ public class Tile {
     private final int id;
     private final Image image;
     private final Data properties;
+    private final Terrain[] terrain;
 
-    Tile(final Data properties, final int id, final Image image) {
+    Tile(final Data properties, final int id, final Image image, final Terrain[] terrain) {
         this.id = id;
         this.image = image;
         this.properties = properties;
+        this.terrain = terrain;
     }
 
     public final int getId() {
@@ -41,5 +43,21 @@ public class Tile {
 
     public final Data getProperties() {
         return this.properties;
+    }
+
+    public final Terrain getTerrainBottomLeft() {
+        return this.terrain[2];
+    }
+
+    public final Terrain getTerrainBottomRight() {
+        return this.terrain[3];
+    }
+
+    public final Terrain getTerrainTopLeft() {
+        return this.terrain[0];
+    }
+
+    public final Terrain getTerrainTopRight() {
+        return this.terrain[1];
     }
 }

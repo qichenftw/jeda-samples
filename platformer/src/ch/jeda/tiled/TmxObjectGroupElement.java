@@ -53,8 +53,9 @@ class TmxObjectGroupElement extends TmxElementWithProperties<ObjectLayer> {
         for (int i = 0; i < this.objectElements.size(); ++i) {
             final TmxObjectElement element = this.objectElements.get(i);
             final Tile tile = mapElement.lookupTile(element.getGid());
-            objects[i] = new TiledObject(element.getName(), element.getType(), element.isVisible(),
-                                         element.getX(), element.getY(), tile);
+            objects[i] = new TiledObject(element.getName(), element.getType(), element.getX(), element.getY(),
+                                         element.getWidth(), element.getHeight(), element.getRotation(),
+                                         tile, element.isVisible());
         }
 
         return new ObjectLayer(this.createData(), name, opacity, visible, color, objects);

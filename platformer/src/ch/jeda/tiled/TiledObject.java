@@ -16,40 +16,91 @@
  */
 package ch.jeda.tiled;
 
+import ch.jeda.ui.Alignment;
+import ch.jeda.ui.Canvas;
+import ch.jeda.ui.Element;
 import ch.jeda.ui.Image;
-import ch.jeda.ui.Shape;
 
-public class TiledObject extends Shape {
+public class TiledObject extends Element {
 
-    private final String name;
-    private final Tile tile;
-    private final String type;
-    private final boolean visible;
+    private String type;
+    private double x;
+    private double y;
+    private double width;
+    private double height;
+    private double rotation;
+    private Tile tile;
+    private Image image;
+    ObjectLayer layer;
 
-    TiledObject(final String name, final String type, final boolean visible, final int x, final int y,
-                final Tile tile) {
-        super(x, y);
-        this.name = name;
-        this.tile = tile;
+    TiledObject(final String name, final String type, final double x, final double y, final double width,
+                final double height, final double rotation, final Tile tile, final boolean visible) {
+        super(name);
         this.type = type;
-        this.visible = visible;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.rotation = rotation;
+        this.tile = tile;
         if (this.tile != null) {
-            final Image image = this.tile.getImage();
-            // Position is lower left corner of object.
-            this.move(image.getWidth() / 2, -image.getHeight() / 2);
-            this.setImage(image);
+            this.image = this.tile.getImage();
         }
     }
 
-    public final String getName() {
-        return this.name;
+    public int getHeight() {
+        if (this.image != null) {
+            return this.image.getHeight();
+        }
+        else {
+            return 0;
+        }
     }
 
     public String getType() {
         return this.type;
     }
 
-    public boolean isVisible() {
-        return this.visible;
+    public int getWidth() {
+        if (this.image != null) {
+            return this.image.getWidth();
+        }
+        else {
+            return 0;
+        }
+    }
+
+    public double getX() {
+        return this.x;
+    }
+
+    public double getY() {
+        return this.y;
+    }
+
+    public void setPosition(final double x, final double y) {
+        final int hw = this.getWidth() / 2;
+        final int hh = this.getHeight() / 2;
+        this.x = x;
+        this.y = y;
+        if (this.x < hw) {
+            this.x = hw;
+        }
+
+        if (this.y < hh) {
+            this.y = hh;
+        }
+    }
+
+    public void setRotation(final double rotation) {
+        this.rotation = rotation;
+    }
+
+    @Override
+    protected void draw(final Canvas canvas) {
+        canvas.setTranslation(this.x + this.layer.getMap().getOffsetX(), this.y + this.layer.getMap().getOffsetY());
+        canvas.setRotation(this.rotation);
+        canvas.drawImage(0, 0, this.image, Alignment.CENTER);
+        canvas.resetTransformations();
     }
 }

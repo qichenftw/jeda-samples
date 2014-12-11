@@ -1,10 +1,9 @@
 package ch.jeda.asteroids;
 
-import ch.jeda.ui.Sprite;
 import ch.jeda.*;
 import ch.jeda.ui.*;
 
-public abstract class Body extends Sprite {
+public abstract class Body extends TopDownSprite {
 
     private static int COUNT = 0;
     int left;

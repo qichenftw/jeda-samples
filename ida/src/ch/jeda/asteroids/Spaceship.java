@@ -8,7 +8,7 @@ public class Spaceship extends Body implements KeyDownListener, KeyUpListener {
 
     private static final double GUN_FIRE_DELAY = 0.2;
 //    private Sound shootSound = new Sound("res:raw/bullet.wav");
-    private RotatedImage thrust;
+    private Image thrust;
     private double gunCooldown;
     private boolean thrustOn;
     private boolean shoot;
@@ -20,7 +20,7 @@ public class Spaceship extends Body implements KeyDownListener, KeyUpListener {
         gunCooldown = 0.0;
         thrustOn = false;
         setImage("res:drawable/ship.png");
-        thrust = new RotatedImage("res:drawable/thrust.png", 36);
+        thrust = new Image("res:drawable/thrust.png");
         setRadius(50);
         setDrawOrder(100);
     }
@@ -29,9 +29,7 @@ public class Spaceship extends Body implements KeyDownListener, KeyUpListener {
     public void draw(Canvas canvas) {
         super.draw(canvas);
         if (thrustOn) {
-            double x = getX() - 50 * (float) Math.cos(getRotation());
-            double y = getY() - 50 * (float) Math.sin(getRotation());
-            canvas.drawImage(x, y, thrust.getImage(getRotation()), Alignment.CENTER);
+            canvas.drawImage(-50, 0, thrust, Alignment.CENTER);
         }
     }
 

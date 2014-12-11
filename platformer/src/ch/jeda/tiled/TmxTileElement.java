@@ -16,11 +16,21 @@
  */
 package ch.jeda.tiled;
 
-public class TmxTileElement extends TmxElement {
+public class TmxTileElement extends TmxElementWithProperties<TmxTileElement> {
 
     private static final String GID = "gid";
+    private static final String ID = "id";
+    private static final String TERRAIN = "terrain";
 
     int getGid() {
         return this.getIntAttribute(GID);
+    }
+
+    int getId() {
+        return this.getIntAttribute(ID);
+    }
+
+    String getTerrain() {
+        return this.getStringAttribute(TERRAIN);
     }
 }

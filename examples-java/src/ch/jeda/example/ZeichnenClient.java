@@ -8,12 +8,13 @@ import ch.jeda.ui.*;
 public class ZeichnenClient extends Program implements PointerDownListener,
                                                        PointerMovedListener,
                                                        TickListener,
-                                                       KeyUpListener {
+                                                       KeyUpListener,
+                                                       MessageReceivedListener {
 
     Window fenster;
     StringInputField serverNameInput;
     Button connectButton;
-    NetworkSocket socket;
+    TcpConnection connection;
     String message;
     Color color;
     int x;
@@ -48,30 +49,29 @@ public class ZeichnenClient extends Program implements PointerDownListener,
 
     @Override
     public void onTick(TickEvent event) {
-        if (socket == null) {
+        if (connection == null) {
             clear();
             fenster.setColor(Color.BLACK);
             fenster.drawText(fenster.getWidth() / 2, y, message, Alignment.CENTER);
         }
-        else {
-            if (socket.hasData()) {
-                Data data = socket.receiveData();
-                color = data.readObject("color");
-            }
-        }
+    }
+
+    @Override
+    public void onMessageReceived(MessageEvent event) {
+        color = event.getData().readObject("color");
     }
 
     @Override
     public void onKeyUp(KeyEvent event) {
-        if (event.getKey() == Key.ENTER && socket == null) {
-            socket = new NetworkSocket();
-            if (socket.connect(serverNameInput.getValue(), 1248)) {
+        if (event.getKey() == Key.ENTER && connection == null) {
+            connection = new TcpConnection();
+            if (connection.open(serverNameInput.getValue(), 1248)) {
                 fenster.remove(serverNameInput);
                 fenster.remove(connectButton);
                 clear();
             }
             else {
-                socket = null;
+                connection = null;
                 message = "Verbindung mit Server nicht möglich.";
                 serverNameInput.select();
             }
@@ -85,13 +85,14 @@ public class ZeichnenClient extends Program implements PointerDownListener,
     }
 
     private void draw(PointerEvent event) {
-        if (socket != null) {
+        if (connection != null) {
             Data data = new Data();
             data.writeInt("x", event.getX());
             data.writeInt("y", event.getY());
-            socket.sendData(data);
+            connection.sendData(data);
             fenster.setColor(color);
             fenster.fillCircle(event.getX(), event.getY(), 5);
         }
     }
+
 }

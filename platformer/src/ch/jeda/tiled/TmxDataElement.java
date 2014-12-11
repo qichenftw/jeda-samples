@@ -26,7 +26,7 @@ import java.util.zip.InflaterInputStream;
 import javax.xml.bind.DatatypeConverter;
 import org.xml.sax.SAXException;
 
-public class TmxDataElement extends TmxElement {
+class TmxDataElement extends TmxElement {
 
     private static final String BASE64 = "base64";
     private static final String COMPRESSION = "compression";
@@ -37,7 +37,7 @@ public class TmxDataElement extends TmxElement {
     private String data;
     private List<TmxTileElement> tiles;
 
-    public TmxDataElement() {
+    TmxDataElement() {
         this.tiles = new ArrayList<TmxTileElement>();
     }
 

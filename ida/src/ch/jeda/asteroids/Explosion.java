@@ -1,10 +1,9 @@
 package ch.jeda.asteroids;
 
-import ch.jeda.ui.Sprite;
 import ch.jeda.*;
 import ch.jeda.ui.*;
 
-public class Explosion extends Sprite {
+public class Explosion extends TopDownSprite {
 
 //    private static Sound SOUND = new Sound("res:raw/explosion.wav");
     private double age;
