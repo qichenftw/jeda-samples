@@ -16,31 +16,7 @@
  */
 package ch.jeda.platformer;
 
-import ch.jeda.ui.Canvas;
-import org.jbox2d.dynamics.FixtureDef;
+public enum BodyFeature {
 
-public abstract class Shape {
-
-    private double friction;
-
-    protected Shape() {
-        this.friction = 0.1;
-    }
-
-    public final void setFricition(final double friction) {
-        this.friction = friction;
-    }
-
-    abstract void draw(final Canvas canvas);
-
-    final FixtureDef createFixtureDef(final double scale, final double density) {
-        FixtureDef result = new FixtureDef();
-        result.shape = createImp(scale);
-        result.density = (float) density;
-        result.friction = (float) friction;
-        return result;
-    }
-
-    abstract org.jbox2d.collision.shapes.Shape createImp(final double scale);
-
+    BULLET, DYNAMIC, FIXED_ROTATION, KINETIC, STATIC,
 }

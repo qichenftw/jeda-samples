@@ -14,33 +14,30 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.jeda.platformer;
+package ch.jeda.tmx;
 
-import ch.jeda.ui.Canvas;
-import org.jbox2d.dynamics.FixtureDef;
+import java.util.Map;
+import java.util.TreeMap;
 
-public abstract class Shape {
+final class TmxTileSets {
 
-    private double friction;
+    private final TreeMap<Integer, TmxTileSet> tileSetsByGid;
 
-    protected Shape() {
-        this.friction = 0.1;
+    TmxTileSets() {
+        this.tileSetsByGid = new TreeMap<Integer, TmxTileSet>();
     }
 
-    public final void setFricition(final double friction) {
-        this.friction = friction;
+    void add(final TmxTileSet tileSet) {
+        this.tileSetsByGid.put(tileSet.getFirstGlobalId(), tileSet);
     }
 
-    abstract void draw(final Canvas canvas);
-
-    final FixtureDef createFixtureDef(final double scale, final double density) {
-        FixtureDef result = new FixtureDef();
-        result.shape = createImp(scale);
-        result.density = (float) density;
-        result.friction = (float) friction;
-        return result;
+    TmxTile lookupTile(final int globalId) {
+        Map.Entry<Integer, TmxTileSet> entry = this.tileSetsByGid.floorEntry(globalId);
+        if (entry == null) {
+            return null;
+        }
+        else {
+            return entry.getValue().getTile(globalId - entry.getKey());
+        }
     }
-
-    abstract org.jbox2d.collision.shapes.Shape createImp(final double scale);
-
 }

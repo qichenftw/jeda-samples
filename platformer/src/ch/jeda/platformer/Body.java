@@ -16,57 +16,81 @@
  */
 package ch.jeda.platformer;
 
+import ch.jeda.ui.Alignment;
 import ch.jeda.ui.Canvas;
 import ch.jeda.ui.Element;
+import ch.jeda.ui.Image;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 
 public class Body extends Element {
 
-    private final double initialX;
-    private final double initialY;
+    private final org.jbox2d.dynamics.Body imp;
+    private final Physics physics;
     private final List<Shape> shapes;
-    private final BodyType type;
-    org.jbox2d.dynamics.Body imp;
-    private World world;
+    private Image image;
 
-    Body(final double x, final double y, final BodyType type) {
-        this.initialX = x;
-        this.initialY = y;
+    Body(final Physics physics, final BodyType type, final double x, final double y) {
         this.shapes = new ArrayList<Shape>();
-        this.type = type;
+        final BodyDef bodyDef = new BodyDef();
+        bodyDef.position.set(physics.scaleLength(x), physics.scaleLength(y));
+        bodyDef.type = type;
+        this.imp = physics.imp.createBody(bodyDef);
+        this.physics = physics;
     }
 
     public final void addShape(final Shape shape) {
         this.shapes.add(shape);
         if (this.imp != null) {
-            this.imp.createFixture(shape.createFixtureDef(this.world.getScale()));
+            this.imp.createFixture(shape.createFixtureDef(this.physics.getScale(), 1));
         }
+
+    }
+
+    public void applyForce(final double fx, final double fy) {
+        this.imp.applyForce(new Vec2(this.physics.scaleLength(fx), this.physics.scaleLength(fy)), this.imp.getWorldCenter());
+    }
+
+    public final void destroy() {
+        this.physics.imp.destroyBody(this.imp);
+    }
+
+    public final double getAngle() {
+        return this.imp.getAngle();
+    }
+
+    public final Image getImage() {
+        return this.image;
     }
 
     public final double getX() {
-        if (this.imp == null) {
-            return this.initialX;
-        }
-        else {
-            return this.imp.getPosition().x * world.getScale();
-        }
+        return this.imp.getPosition().x * this.physics.getScale();
     }
 
     public final double getY() {
-        if (this.imp == null) {
-            return this.initialY;
-        }
-        else {
-            return this.imp.getPosition().y * world.getScale();
-        }
+        return this.imp.getPosition().y * this.physics.getScale();
+    }
+
+    public void setImage(final Image image) {
+        this.image = image;
+    }
+
+    public void setImage(final String path) {
+        this.image = new Image(path);
     }
 
     @Override
     protected void draw(final Canvas canvas) {
+        canvas.setRotation(this.imp.getAngle());
         canvas.setTranslation(this.getX(), this.getY());
+        if (this.image != null) {
+            canvas.drawImage(0, 0, this.image, Alignment.CENTER);
+        }
+
         for (final Shape shape : this.shapes) {
             shape.draw(canvas);
         }
@@ -74,17 +98,12 @@ public class Body extends Element {
         canvas.resetTransformations();
     }
 
-    void addToWorld(final World world) {
-        this.world = world;
-        final BodyDef bodyDef = new BodyDef();
-        final double x = this.initialX / world.getScale();
-        final double y = this.initialY / world.getScale();
-        bodyDef.position.set((float) x, (float) y);
-        bodyDef.type = type;
-
-        this.imp = world.imp.createBody(bodyDef);
-        for (final Shape shape : this.shapes) {
-            this.imp.createFixture(shape.createFixtureDef(world.getScale()));
+    private static EnumSet<BodyFeature> toSet(final BodyFeature... features) {
+        final EnumSet<BodyFeature> result = EnumSet.noneOf(BodyFeature.class);
+        for (BodyFeature feature : features) {
+            result.add(feature);
         }
+
+        return result;
     }
 }

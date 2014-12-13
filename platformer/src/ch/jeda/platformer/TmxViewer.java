@@ -16,31 +16,30 @@
  */
 package ch.jeda.platformer;
 
-import ch.jeda.ui.Canvas;
-import org.jbox2d.dynamics.FixtureDef;
+import ch.jeda.Program;
+import ch.jeda.event.TickEvent;
+import ch.jeda.event.TickListener;
+import ch.jeda.tmx.TmxMap;
+import ch.jeda.ui.Window;
+import ch.jeda.ui.WindowFeature;
 
-public abstract class Shape {
+public class TmxViewer extends Program implements TickListener {
 
-    private double friction;
+    Window fenster;
+    TmxMap map;
+    DragHelper drag;
 
-    protected Shape() {
-        this.friction = 0.1;
+    @Override
+    public void run() {
+        fenster = new Window(1280, 800, WindowFeature.DOUBLE_BUFFERED);
+        map = new TmxMap("res:level-1.tmx");
+        drag = new DragHelper(fenster, map.getWidth() * map.getTileWidth(), map.getHeight() * map.getTileHeight());
+        fenster.addEventListener(this);
     }
 
-    public final void setFricition(final double friction) {
-        this.friction = friction;
+    @Override
+    public void onTick(TickEvent event) {
+        map.draw(fenster, drag.getOffsetX(), drag.getOffsetY());
     }
-
-    abstract void draw(final Canvas canvas);
-
-    final FixtureDef createFixtureDef(final double scale, final double density) {
-        FixtureDef result = new FixtureDef();
-        result.shape = createImp(scale);
-        result.density = (float) density;
-        result.friction = (float) friction;
-        return result;
-    }
-
-    abstract org.jbox2d.collision.shapes.Shape createImp(final double scale);
 
 }

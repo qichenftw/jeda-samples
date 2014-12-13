@@ -14,33 +14,22 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.jeda.platformer;
+package ch.jeda.tmx;
 
-import ch.jeda.ui.Canvas;
-import org.jbox2d.dynamics.FixtureDef;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
 
-public abstract class Shape {
+class TmxEntityResolver implements EntityResolver {
 
-    private double friction;
+    private static final String TMX_DTD_URL = "http://mapeditor.org/dtd/1.0/map.dtd";
 
-    protected Shape() {
-        this.friction = 0.1;
+    @Override
+    public InputSource resolveEntity(final String publicId, final String systemId) {
+        if (TMX_DTD_URL.equals(systemId)) {
+            return new InputSource(this.getClass().getResourceAsStream("ch/jeda/tiled/map.dtd"));
+        }
+        else {
+            return null;
+        }
     }
-
-    public final void setFricition(final double friction) {
-        this.friction = friction;
-    }
-
-    abstract void draw(final Canvas canvas);
-
-    final FixtureDef createFixtureDef(final double scale, final double density) {
-        FixtureDef result = new FixtureDef();
-        result.shape = createImp(scale);
-        result.density = (float) density;
-        result.friction = (float) friction;
-        return result;
-    }
-
-    abstract org.jbox2d.collision.shapes.Shape createImp(final double scale);
-
 }

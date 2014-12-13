@@ -39,12 +39,15 @@
    </properties>
   </tile>
  </tileset>
+ <imagelayer name="Bildebene 1" y="-300">
+  <image source="../../jeda-artwork/physics/background/colored_land.png"/>
+ </imagelayer>
  <layer name="Background" width="200" height="10">
   <data encoding="base64" compression="zlib">
    eJzt1iEOgDAQBMCSAA6B7f8fSqtQpXVHLjPJuhNrNrlSgJG95Wg5o4sAACS18m/5yeC1RReAn+rbuKJLQJB7kr6NOrmHrOpivu4hK/uAsQcCBARN
   </data>
  </layer>
  <objectgroup name="Objekte">
-  <object name="Player" gid="109" x="265" y="492" width="70" height="100"/>
+  <object name="Player" gid="109" x="491" y="278" width="70" height="100" rotation="24.1104"/>
  </objectgroup>
 </map>
