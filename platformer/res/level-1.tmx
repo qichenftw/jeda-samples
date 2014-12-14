@@ -2,9 +2,26 @@
 <map version="1.0" orientation="orthogonal" renderorder="left-up" width="20" height="10" tilewidth="70" tileheight="70">
  <tileset firstgid="1" name="aliens" tilewidth="70" tileheight="70">
   <image source="aliens.png" width="210" height="350"/>
+  <tile id="9">
+   <objectgroup draworder="index">
+    <object x="0.5" y="-0.5" width="68" height="68.5">
+     <ellipse/>
+    </object>
+   </objectgroup>
+  </tile>
  </tileset>
  <tileset firstgid="16" name="blocks-70x140" tilewidth="70" tileheight="140">
   <image source="blocks-70x140.png" width="350" height="700"/>
+  <tile id="5">
+   <objectgroup draworder="index">
+    <object x="1" y="1" width="68.5" height="138.5"/>
+   </objectgroup>
+   <animation>
+    <frame tileid="5" duration="500"/>
+    <frame tileid="6" duration="500"/>
+    <frame tileid="7" duration="500"/>
+   </animation>
+  </tile>
  </tileset>
  <tileset firstgid="41" name="blocks-220x70" tilewidth="220" tileheight="70">
   <tileoffset x="30" y="0"/>
@@ -12,9 +29,21 @@
  </tileset>
  <tileset firstgid="66" name="blocks-140x70" tilewidth="140" tileheight="70">
   <image source="blocks-140x70.png" width="700" height="700"/>
+  <tile id="25">
+   <objectgroup draworder="index">
+    <object x="0.5" y="2" width="138.5" height="67"/>
+   </objectgroup>
+  </tile>
  </tileset>
  <tileset firstgid="116" name="blocks-70x70" tilewidth="70" tileheight="70">
   <image source="blocks-70x70.png" width="350" height="1050"/>
+  <tile id="20">
+   <objectgroup draworder="index">
+    <object x="1" y="2" width="68" height="67">
+     <ellipse/>
+    </object>
+   </objectgroup>
+  </tile>
  </tileset>
  <imagelayer name="Hintergrund 1" y="-100">
   <image source="colored_desert.png"/>
@@ -22,9 +51,26 @@
  <imagelayer name="Hintergrund 2" x="1024" y="-100">
   <image source="colored_desert.png"/>
  </imagelayer>
- <layer name="Kachelebene 1" width="20" height="10">
+ <layer name="Statisch" width="20" height="10">
+  <properties>
+   <property name="physics" value="static"/>
+  </properties>
   <data encoding="base64" compression="zlib">
-   eJxjYBg4wDWAdiMDPSxigVC6l4A6ZCBKQN4di5nEAGRzBZDE3PGow+YWmBguf7ijqQOBQGwKiQC43IfNDhgQwyIngMTGphfdDn0s5mLzL8gMmN+QzUW3AwBA9Qbv
+   eJxjYBgFo2D4gGgq0wCfiAOP
   </data>
  </layer>
+ <layer name="Dynamisch" width="20" height="10">
+  <properties>
+   <property name="physics" value="dynamic"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJxjYBh6QA+LWCCU7iWgDhmIEpB3x2ImMQDZXAEkMXc86rC5BSaGyx/uaOpAIBCbQiIALvdhs4MBTQybf3G5D90ObH7DJgYyA+Y3ZHPxuY8aAABMZwbj
+  </data>
+ </layer>
+ <objectgroup name="Objektebene 1">
+  <properties>
+   <property name="physics" value="dynamic"/>
+  </properties>
+  <object name="player" gid="10" x="490" y="74"/>
+ </objectgroup>
 </map>

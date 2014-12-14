@@ -31,8 +31,8 @@ public class TmxViewer extends Program implements TickListener {
 
     @Override
     public void run() {
-        fenster = new Window(1280, 800, WindowFeature.DOUBLE_BUFFERED);
-        map = new TmxMap("res:level-1.tmx");
+        fenster = new Window(1400, 700, WindowFeature.DOUBLE_BUFFERED);
+        map = new TmxMap("res:/level-1.tmx");
         drag = new DragHelper(fenster, map.getWidth() * map.getTileWidth(), map.getHeight() * map.getTileHeight());
         fenster.addEventListener(this);
     }

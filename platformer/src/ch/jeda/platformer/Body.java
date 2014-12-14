@@ -32,15 +32,21 @@ public class Body extends Element {
     private final org.jbox2d.dynamics.Body imp;
     private final Physics physics;
     private final List<Shape> shapes;
+    double fatigue;
+    double fatigueThreshold;
     private Image image;
+    private String name;
 
     Body(final Physics physics, final BodyType type, final double x, final double y) {
-        this.shapes = new ArrayList<Shape>();
         final BodyDef bodyDef = new BodyDef();
         bodyDef.position.set(physics.scaleLength(x), physics.scaleLength(y));
         bodyDef.type = type;
         this.imp = physics.imp.createBody(bodyDef);
+        this.imp.m_userData = this;
         this.physics = physics;
+        this.shapes = new ArrayList<Shape>();
+        this.fatigue = 0.0;
+        this.fatigueThreshold = 0.1;
     }
 
     public final void addShape(final Shape shape) {
@@ -48,7 +54,6 @@ public class Body extends Element {
         if (this.imp != null) {
             this.imp.createFixture(shape.createFixtureDef(this.physics.getScale(), 1));
         }
-
     }
 
     public void applyForce(final double fx, final double fy) {
@@ -57,14 +62,46 @@ public class Body extends Element {
 
     public final void destroy() {
         this.physics.imp.destroyBody(this.imp);
+        this.physics.bodyDestroyed(this);
     }
 
     public final double getAngle() {
         return this.imp.getAngle();
     }
 
+    /**
+     * Returns the current fatigue of this body. The fatigue is the sum of all impulses above the fatigue threshold that
+     * have been acting on this body so far.
+     *
+     * @return the current fatigue of this body
+     *
+     * @since 1.6
+     */
+    public final double getFatigue() {
+        return this.fatigue;
+    }
+
+    /**
+     * Returns the fatigue threshold.
+     *
+     * @return the fatigue threshold
+     *
+     * @since 1.6
+     */
+    public double getFatigueThreshold() {
+        return this.fatigueThreshold;
+    }
+
     public final Image getImage() {
         return this.image;
+    }
+
+    public final double getLinearImpulse() {
+        return this.imp.getLinearVelocity().length() * this.imp.m_mass;
+    }
+
+    public final String getName() {
+        return this.name;
     }
 
     public final double getX() {
@@ -75,12 +112,42 @@ public class Body extends Element {
         return this.imp.getPosition().y * this.physics.getScale();
     }
 
+    public final boolean isStatic() {
+        return this.imp.m_type == BodyType.STATIC;
+    }
+
+    public void setFatigue(final double fatigue) {
+        this.fatigue = fatigue;
+    }
+
+    public void setFatigueThreshold(final double fatigueThreshold) {
+        this.fatigueThreshold = fatigueThreshold;
+    }
+
     public void setImage(final Image image) {
         this.image = image;
     }
 
     public void setImage(final String path) {
         this.image = new Image(path);
+    }
+
+    public void setName(final String name) {
+        this.physics.nameChanged(this, this.name, name);
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder result = new StringBuilder();
+        result.append("Body(name=");
+        result.append(this.name);
+        result.append(", x=");
+        result.append(this.getX());
+        result.append(", y=");
+        result.append(this.getY());
+        result.append(")");
+        return result.toString();
     }
 
     @Override
@@ -94,7 +161,6 @@ public class Body extends Element {
         for (final Shape shape : this.shapes) {
             shape.draw(canvas);
         }
-
         canvas.resetTransformations();
     }
 

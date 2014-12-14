@@ -31,14 +31,6 @@
   <tile id="28" terrain="0,0,0,"/>
   <tile id="29" terrain="0,0,0,"/>
  </tileset>
- <tileset firstgid="109" name="player" tilewidth="72" tileheight="97">
-  <image source="res/drawable/player.png" width="72" height="97"/>
-  <tile id="0">
-   <properties>
-    <property name="name" value="Spieler"/>
-   </properties>
-  </tile>
- </tileset>
  <imagelayer name="Bildebene 1" y="-300">
   <image source="../../jeda-artwork/physics/background/colored_land.png"/>
  </imagelayer>

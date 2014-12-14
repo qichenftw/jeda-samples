@@ -37,7 +37,8 @@ public abstract class Shape {
         FixtureDef result = new FixtureDef();
         result.shape = createImp(scale);
         result.density = (float) density;
-        result.friction = (float) friction;
+        result.friction = (float) this.friction;
+        result.userData = this;
         return result;
     }
 

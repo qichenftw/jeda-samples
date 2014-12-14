@@ -18,16 +18,21 @@ package ch.jeda.platformer;
 
 import ch.jeda.event.TickEvent;
 import ch.jeda.event.TickListener;
+import ch.jeda.ui.Canvas;
 import ch.jeda.ui.Window;
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
 
-public final class Physics implements TickListener {
+public class Physics implements TickListener {
 
     private final List<Body> bodies;
+    private final Map<String, Body> bodiesByName;
     final org.jbox2d.dynamics.World imp;
     private final Window window;
     private double scale;
@@ -35,54 +40,80 @@ public final class Physics implements TickListener {
 
     public Physics(final Window window) {
         this.bodies = new ArrayList<Body>();
+        this.bodiesByName = new HashMap<String, Body>();
         this.imp = new org.jbox2d.dynamics.World(new Vec2(0f, 0f));
+        this.imp.setContactListener(new PhysicsContactListener());
         this.paused = true;
         this.scale = 10.0;
         this.window = window;
         this.window.addEventListener(this);
     }
 
-    public void loadTmxMap(final String path) {
-
-    }
-
-    public Body createDynamicBody(final double x, final double y) {
+    public final Body createDynamicBody(final double x, final double y) {
         final Body result = new Body(this, BodyType.DYNAMIC, x, y);
         this.addBody(result);
 
         return result;
     }
 
-    public Body createStaticBody(final double x, final double y) {
+    public final Body createStaticBody(final double x, final double y) {
         final Body result = new Body(this, BodyType.STATIC, x, y);
         this.addBody(result);
         return result;
     }
 
-    public double getScale() {
+    public final Body[] getBodies() {
+        return this.bodies.toArray(new Body[this.bodies.size()]);
+    }
+
+    public final Body getBody(final String name) {
+        return this.bodiesByName.get(name);
+    }
+
+    public final double getScale() {
         return this.scale;
     }
 
-    public boolean isPaused() {
+    public final boolean isPaused() {
         return this.paused;
     }
 
-    public void setGravity(final double ax, final double ay) {
+    public final void setGravity(final double ax, final double ay) {
         this.imp.setGravity(new Vec2((float) ax, (float) ay));
     }
 
-    public void setScale(final double scale) {
+    public final void setScale(final double scale) {
         this.scale = scale;
     }
 
-    public void setPaused(final boolean paused) {
+    public final void setPaused(final boolean paused) {
         this.paused = paused;
     }
 
     @Override
     public void onTick(final TickEvent event) {
+        this.drawBackground(this.window);
         if (!this.paused) {
-            this.imp.step((float) event.getDuration(), 1, 1);
+            this.imp.step((float) event.getDuration(), 6, 2);
+        }
+    }
+
+    protected void drawBackground(final Canvas canvas) {
+    }
+
+    void bodyDestroyed(final Body body) {
+        this.bodies.remove(body);
+        this.window.remove(body);
+        this.bodiesByName.remove(body.getName());
+    }
+
+    void nameChanged(final Body body, final String oldName, final String newName) {
+        if (oldName != null) {
+            this.bodiesByName.remove(oldName);
+        }
+
+        if (newName != null) {
+            this.bodiesByName.put(newName, body);
         }
     }
 

@@ -11,50 +11,58 @@ public class PhysicsSample extends Program implements TickListener, KeyDownListe
     boolean rechts;
     boolean springen;
     // Daten der Spielfigur
-    Physics physics;
-    Body body;
+    TmxPhysics physics;
+    Body player;
+    ContactEvent contact;
 
     @Override
     public void run() {
-        fenster = new Window(1280, 800, WindowFeature.DOUBLE_BUFFERED);
-        physics = new Physics(fenster);
+        Jeda.setTickFrequency(60);
+        fenster = new Window(1400, 700, WindowFeature.DOUBLE_BUFFERED);
+        physics = new TmxPhysics(fenster);
         physics.setScale(100);
         physics.setGravity(0, 10);
 
-        for (int i = 0; i < 50; ++i) {
-            physics.createDynamicBody(100 + Math.random() * 500, 100 + Math.random() * 500).addShape(new RectangleShape(20, 20));
-        }
+        physics.loadMap("res:level-1.tmx");
 
-        body = physics.createDynamicBody(100, 100);
-        body.addShape(new CircleShape(35));
-        body.setImage("res:drawable/alien_beige.png");
-//        body.addShape(new RectangleShape(80, 10));
-
-        physics.createStaticBody(640, 794).addShape(new RectangleShape(1280, 10));
-
-        physics.setPaused(false);
+        player = physics.getBody("player");
         fenster.addEventListener(this);
+        physics.setPaused(false);
     }
 
     @Override
     public void onTick(TickEvent event) {
-        fenster.setColor(Color.WHITE);
-        fenster.fill();
-        fenster.setColor(Color.BLACK);
+        if (this.contact != null && this.contact.involves(player)) {
+            fenster.setColor(Color.RED);
+            fenster.drawText(10, 10, "contact!");
+            this.contact = null;
+        }
+
+        for (final Body body : physics.getBodies()) {
+            if (body != player && !body.isStatic()) {
+                if (body.getFatigue() > 50) {
+                }
+
+                if (body.getFatigue() > 50) {
+                    body.destroy();
+                }
+            }
+
+        }
         steuereSpielfigur();
     }
 
     void steuereSpielfigur() {
         if (links) {
-            body.applyForce(-500, 0);
+            player.applyForce(-500, 0);
         }
 
         if (rechts) {
-            body.applyForce(500, 0);
+            player.applyForce(500, 0);
         }
 
         if (springen) {
-            body.applyForce(0, -2000);
+            player.applyForce(0, -2000);
         }
     }
 
