@@ -64,13 +64,13 @@
    <property name="physics" value="dynamic"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJxjYBh6QA+LWCCU7iWgDhmIEpB3x2ImMQDZXAEkMXc86rC5BSaGyx/uaOpAIBCbQiIALvdhs4MBTQybf3G5D90ObH7DJgYyA+Y3ZHPxuY8aAABMZwbj
+   eJxjYMAPjNH4eljUuBMwg1hArDnY3BAIpXsJqEMGokS6pxevKvzmCiCJoftPFAcbXQyXP9zR1IFAIDaFRABc7sNmBwOaGDb/4nIfuh3Y/IZNDGQGzG/I5uJzHzUAAO61B9I=
   </data>
  </layer>
  <objectgroup name="Objektebene 1">
   <properties>
    <property name="physics" value="dynamic"/>
   </properties>
-  <object name="player" gid="10" x="490" y="74"/>
+  <object name="player" gid="10" x="418" y="90"/>
  </objectgroup>
 </map>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 by Stefan Rothe
+ * Copyright (C) 2015 by Stefan Rothe
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,9 +14,31 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.jeda.platformer;
+package ch.jeda.physics;
 
-public enum BodyFeature {
+/**
+ * Represents a physics body type.
+ *
+ * @since 2.0
+ */
+public enum BodyType {
 
-    BULLET, DYNAMIC, FIXED_ROTATION, KINETIC, STATIC,
+    /**
+     * A dynamic body. Dynamic bodies can move and are affected by forces and collide with other bodies.
+     *
+     * @since 2.0
+     */
+    DYNAMIC,
+    /**
+     * A kinematic body.
+     *
+     * @since 2.0
+     */
+    KINEMATIC,
+    /**
+     * A static body. Static bodies cannot move. They behave like they have an infinite mass.
+     *
+     * @since 2.0
+     */
+    STATIC,
 }

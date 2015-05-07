@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 by Stefan Rothe
+ * Copyright (C) 2014 - 2015 by Stefan Rothe
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,19 +14,48 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.jeda.platformer;
+package ch.jeda.physics;
 
 import ch.jeda.ui.Alignment;
 import ch.jeda.ui.Canvas;
 import ch.jeda.ui.Color;
 import org.jbox2d.common.Vec2;
 
+/**
+ * Represents a rectangle shape.
+ *
+ * @since 2.0
+ */
 public class RectangleShape extends Shape {
 
     private final double width;
     private final double height;
 
+    /**
+     * Constructs a rectangle shape.
+     *
+     * @param width the width of the rectangle
+     * @param height the height of the rectangle
+     *
+     * @since 2.0
+     */
     public RectangleShape(final double width, final double height) {
+
+        this.height = height;
+        this.width = width;
+    }
+
+    /**
+     * Constructs a rectangle shape.
+     *
+     * @param width the width of the rectangle
+     * @param height the height of the rectangle
+     * @param friction the friction of the rectangle
+     *
+     * @since 2.0
+     */
+    public RectangleShape(final double width, final double height, final double friction) {
+        super(friction);
         this.height = height;
         this.width = width;
     }

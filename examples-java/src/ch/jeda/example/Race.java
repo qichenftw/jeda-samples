@@ -4,24 +4,20 @@ import ch.jeda.*;
 import ch.jeda.event.*;
 import ch.jeda.ui.*;
 
-public class Race extends Program implements TickListener {
+public class Race extends Program {
 
-    Window window;
+    View view;
     Sprite ship;
     Image background;
 
     @Override
     public void run() {
-        window = new Window();
-        ship = new Car(window.getWidth() / 2, window.getHeight() / 2);
-        window.add(ship);
-        window.addEventListener(this);
-    }
-
-    @Override
-    public void onTick(TickEvent event) {
-        window.setColor(Color.BLACK);
-        window.fill();
+        view = new View();
+        ship = new Car(view.getWidth() / 2, view.getHeight() / 2);
+        view.add(ship);
+        view.getBackground().setColor(Color.BLACK);
+        view.getBackground().fill();
+        view.addEventListener(this);
     }
 }
 
@@ -65,18 +61,18 @@ class Car extends Sprite implements KeyDownListener, KeyUpListener {
 
         // Raum geht am Bildschirmrand auf der gegenüberliegenden Seite weiter
         if (newX < 0) {
-            newX = getWindow().getWidth();
+            newX = getView().getWidth();
         }
 
         if (newY < 0) {
             newY = 0;
         }
 
-        if (newX > getWindow().getWidth()) {
+        if (newX > getView().getWidth()) {
             newX = 0;
         }
 
-        if (newY > getWindow().getHeight()) {
+        if (newY > getView().getHeight()) {
             newY = 0;
         }
 

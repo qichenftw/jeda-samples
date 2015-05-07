@@ -3,21 +3,31 @@ package ch.jeda.asteroids;
 import ch.jeda.*;
 import ch.jeda.ui.*;
 
-public abstract class Body extends TopDownSprite {
+public abstract class Body extends Element {
 
     private static int COUNT = 0;
+    private double x;
+    private double y;
     int left;
     int top;
     int width;
     int height;
 
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
     protected Body(double x, double y, double speed, double direction) {
-        super(x, y, speed, direction);
+        this.x = x;
+        this.y = y;
     }
 
     @Override
     protected void draw(Canvas canvas) {
-        super.draw(canvas);
         canvas.setColor(Color.RED);
         canvas.drawCircle(getX(), getY(), getRadius());
         canvas.drawRectangle(left, top, width, height);

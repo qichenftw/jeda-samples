@@ -14,19 +14,19 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.jeda.platformer;
+package ch.jeda.physics;
 
 import ch.jeda.event.Event;
 import ch.jeda.event.EventType;
 
 public class ContactEvent extends Event {
 
-    private final Body firstBody;
+    private final PhysicsBodyImp firstBody;
     private final Shape firstShape;
-    private final Body secondBody;
+    private final PhysicsBodyImp secondBody;
     private final Shape secondShape;
 
-    public ContactEvent(final Object source, final Body firstBody, final Shape firstShape, final Body secondBody,
+    public ContactEvent(final Object source, final PhysicsBodyImp firstBody, final Shape firstShape, final PhysicsBodyImp secondBody,
                         final Shape secondShape) {
         super(source, EventType.ACTION);
         this.firstBody = firstBody;
@@ -35,7 +35,7 @@ public class ContactEvent extends Event {
         this.secondShape = secondShape;
     }
 
-    public Body getFirstBody() {
+    public PhysicsBodyImp getFirstBody() {
         return this.firstBody;
     }
 
@@ -43,7 +43,7 @@ public class ContactEvent extends Event {
         return this.firstShape;
     }
 
-    public Body getSecondBody() {
+    public PhysicsBodyImp getSecondBody() {
         return this.secondBody;
     }
 
@@ -51,7 +51,7 @@ public class ContactEvent extends Event {
         return this.secondShape;
     }
 
-    public boolean involves(final Body body) {
+    public boolean involves(final PhysicsBodyImp body) {
         return this.firstBody == body || this.secondBody == body;
     }
 }

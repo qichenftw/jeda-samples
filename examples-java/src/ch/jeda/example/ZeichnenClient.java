@@ -11,7 +11,7 @@ public class ZeichnenClient extends Program implements PointerDownListener,
                                                        KeyUpListener,
                                                        MessageReceivedListener {
 
-    Window fenster;
+    View fenster;
     StringInputField serverNameInput;
     Button connectButton;
     TcpConnection connection;
@@ -22,7 +22,7 @@ public class ZeichnenClient extends Program implements PointerDownListener,
 
     @Override
     public void run() {
-        fenster = new Window();
+        fenster = new View();
         x = fenster.getWidth() / 2;
         y = fenster.getHeight() / 2 - 120;
         serverNameInput = new StringInputField(x, y, Alignment.CENTER);
@@ -51,8 +51,8 @@ public class ZeichnenClient extends Program implements PointerDownListener,
     public void onTick(TickEvent event) {
         if (connection == null) {
             clear();
-            fenster.setColor(Color.BLACK);
-            fenster.drawText(fenster.getWidth() / 2, y, message, Alignment.CENTER);
+            fenster.getBackground().setColor(Color.BLACK);
+            fenster.getBackground().drawText(fenster.getWidth() / 2, y, message, Alignment.CENTER);
         }
     }
 
@@ -79,9 +79,9 @@ public class ZeichnenClient extends Program implements PointerDownListener,
     }
 
     private void clear() {
-        fenster.setColor(Color.WHITE);
-        fenster.fill();
-        JedaLogo.draw(fenster);
+        fenster.getBackground().setColor(Color.WHITE);
+        fenster.getBackground().fill();
+        JedaLogo.draw(fenster.getBackground());
     }
 
     private void draw(PointerEvent event) {
@@ -90,8 +90,8 @@ public class ZeichnenClient extends Program implements PointerDownListener,
             data.writeInt("x", event.getX());
             data.writeInt("y", event.getY());
             connection.sendData(data);
-            fenster.setColor(color);
-            fenster.fillCircle(event.getX(), event.getY(), 5);
+            fenster.getBackground().setColor(color);
+            fenster.getBackground().fillCircle(event.getX(), event.getY(), 5);
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 by Stefan Rothe
+ * Copyright (C) 2015 by Stefan Rothe
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,29 +14,39 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.jeda.platformer;
+package ch.jeda.physics;
 
 import ch.jeda.ui.Canvas;
-import ch.jeda.ui.Color;
 
-public class CircleShape extends Shape {
+interface BodyImp {
 
-    private final double radius;
+    void addShape(Shape shape);
 
-    public CircleShape(final double radius) {
-        this.radius = radius;
-    }
+    void applyForce(double fx, double fy);
 
-    @Override
-    void draw(final Canvas canvas) {
-        canvas.setColor(Color.RED);
-        canvas.drawCircle(0, 0, this.radius);
-    }
+    boolean belongsTo(Physics physics);
 
-    @Override
-    org.jbox2d.collision.shapes.Shape createImp(final double scale) {
-        final org.jbox2d.collision.shapes.CircleShape result = new org.jbox2d.collision.shapes.CircleShape();
-        result.m_radius = (float) (this.radius / scale);
-        return result;
-    }
+    void destroy();
+
+    void drawOverlay(Canvas canvas);
+
+    double getRotation();
+
+    Shape[] getShapes();
+
+    BodyType getType();
+
+    double getX();
+
+    double getY();
+
+    boolean isRotationFixed();
+
+    void setPosition(double x, double y);
+
+    void setRotation(double rotation);
+
+    void setRotationFixed(boolean rotationFixed);
+
+    void setType(BodyType type);
 }

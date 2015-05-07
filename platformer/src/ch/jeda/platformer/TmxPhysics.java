@@ -16,6 +16,10 @@
  */
 package ch.jeda.platformer;
 
+import ch.jeda.physics.Body;
+import ch.jeda.physics.RectangleShape;
+import ch.jeda.physics.Shape;
+import ch.jeda.physics.CircleShape;
 import ch.jeda.tmx.TmxLayer;
 import ch.jeda.tmx.TmxMap;
 import ch.jeda.tmx.TmxObject;
@@ -23,14 +27,13 @@ import ch.jeda.tmx.TmxTile;
 import ch.jeda.ui.Canvas;
 import ch.jeda.ui.Window;
 
-public class TmxPhysics extends Physics {
+public class TmxPhysics {
 
     private static final String DYNAMIC = "dynamic";
     private static final String PHYSICS = "physics";
     private TmxMap map;
 
     public TmxPhysics(final Window window) {
-        super(window);
     }
 
     public void loadMap(final String path) {
@@ -44,7 +47,6 @@ public class TmxPhysics extends Physics {
         }
     }
 
-    @Override
     protected void drawBackground(final Canvas canvas) {
         if (this.map != null) {
             this.map.draw(canvas, 0, 0);
@@ -52,12 +54,13 @@ public class TmxPhysics extends Physics {
     }
 
     private Body createBody(final double x, final double y, final boolean dynamic) {
-        if (dynamic) {
-            return this.createDynamicBody(x, y);
-        }
-        else {
-            return this.createStaticBody(x, y);
-        }
+//        if (dynamic) {
+//            return this.createDynamicBody(x, y);
+//        }
+//        else {
+//            return this.createStaticBody(x, y);
+//        }
+        return null;
     }
 
     private void processLayer(final TmxLayer layer) {
@@ -89,11 +92,11 @@ public class TmxPhysics extends Physics {
 
     private void processObject(final TmxObject object, final boolean dynamic) {
         final Body body = this.createBody(object.getX(), object.getY(), dynamic);
-        body.setName(object.getName());
+//        body.setName(object.getName());
         body.addShape(this.objectToShape(object));
         final TmxTile tile = object.getTile();
         if (tile != null) {
-            body.setImage(tile.getImage());
+            //          body.setImage(tile.getImage());
         }
     }
 
@@ -125,7 +128,7 @@ public class TmxPhysics extends Physics {
             body.addShape(new RectangleShape(tile.getWidth(), tile.getHeight()));
         }
 
-        body.setImage(tile.getImage());
+//        body.setImage(tile.getImage());
     }
 
     private Shape objectToShape(TmxObject object) {

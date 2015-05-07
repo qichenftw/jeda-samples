@@ -31,7 +31,6 @@ public class Game extends Program implements ActionListener, TickListener, KeyUp
     private PressedKeys pressedKeys;
     private Composite mainMenu;
     private Music menuMusic;
-    private Composite about;
     private HUD hud;
 
     @Override
@@ -102,11 +101,9 @@ public class Game extends Program implements ActionListener, TickListener, KeyUp
     }
 
     private void initAbout() {
-        about = new Composite();
-        window.add(about);
-        about.add(new ImageWidget(0, 0, menuBackground));
-        about.add(new ScrollingText(ABOUT));
-        about.setVisible(false);
+        window.setPage("about");
+        window.add(new ImageWidget(0, 0, menuBackground));
+        window.add(new ScrollingText(ABOUT));
     }
 
     private void initMenu() {

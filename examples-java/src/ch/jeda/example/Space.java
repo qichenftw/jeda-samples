@@ -4,28 +4,24 @@ import ch.jeda.*;
 import ch.jeda.event.*;
 import ch.jeda.ui.*;
 
-public class Space extends Program implements TickListener {
+public class Space extends Program {
 
-    Window window;
+    View view;
     Ship ship;
     Image background;
 
     @Override
     public void run() {
-        window = new Window(WindowFeature.DOUBLE_BUFFERED);
-        ship = new Ship(window.getWidth() / 2, window.getHeight() / 2);
-        window.add(ship);
+        view = new View(ViewFeature.DOUBLE_BUFFERED);
+        ship = new Ship(view.getWidth() / 2, view.getHeight() / 2);
+        view.add(ship);
         background = new Image("res:drawable/space.jpg");
-        window.addEventListener(this);
-    }
-
-    @Override
-    public void onTick(TickEvent event) {
-        window.drawImage(0, 0, background);
+        view.addEventListener(this);
+        view.getBackground().drawImage(0, 0, background);
     }
 }
 
-class Ship extends TopDownSprite implements KeyDownListener, KeyUpListener {
+class Ship extends Sprite implements KeyDownListener, KeyUpListener {
 
     private boolean turnLeft;
     private boolean turnRight;
@@ -65,18 +61,18 @@ class Ship extends TopDownSprite implements KeyDownListener, KeyUpListener {
 
         // Raum geht am Bildschirmrand auf der gegenüberliegenden Seite weiter
         if (newX < 0) {
-            newX = getWindow().getWidth();
+            newX = getView().getWidth();
         }
 
         if (newY < 0) {
-            newY = getWindow().getHeight();
+            newY = getView().getHeight();
         }
 
-        if (newX > getWindow().getWidth()) {
+        if (newX > getView().getWidth()) {
             newX = 0;
         }
 
-        if (newY > getWindow().getHeight()) {
+        if (newY > getView().getHeight()) {
             newY = 0;
         }
 

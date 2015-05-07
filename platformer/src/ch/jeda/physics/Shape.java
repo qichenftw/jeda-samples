@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 by Stefan Rothe
+ * Copyright (C) 2015 by Stefan Rothe
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,20 +14,38 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.jeda.platformer;
+package ch.jeda.physics;
 
 import ch.jeda.ui.Canvas;
 import org.jbox2d.dynamics.FixtureDef;
 
+/**
+ * Represents a shape.
+ *
+ * @since 2.0
+ */
 public abstract class Shape {
 
-    private double friction;
+    private static final double DEFAULT_FRICTION = 0.1;
+    private final double friction;
 
+    /**
+     * Constructs a shape.
+     *
+     * @since 2.0
+     */
     protected Shape() {
-        this.friction = 0.1;
+        this(DEFAULT_FRICTION);
     }
 
-    public final void setFricition(final double friction) {
+    /**
+     * Constructs a shape.
+     *
+     * @param friction the friction of this shape
+     *
+     * @since 2.0
+     */
+    protected Shape(final double friction) {
         this.friction = friction;
     }
 
@@ -43,5 +61,4 @@ public abstract class Shape {
     }
 
     abstract org.jbox2d.collision.shapes.Shape createImp(final double scale);
-
 }

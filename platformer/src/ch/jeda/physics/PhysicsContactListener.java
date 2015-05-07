@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package ch.jeda.platformer;
+package ch.jeda.physics;
 
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
@@ -26,31 +26,32 @@ class PhysicsContactListener implements ContactListener {
 
     @Override
     public void beginContact(final Contact contact) {
-        org.jbox2d.dynamics.Body jbBodyA = contact.m_fixtureA.m_body;
-        org.jbox2d.dynamics.Body jbBodyB = contact.m_fixtureB.m_body;
-
-        final Vec2 va = jbBodyA.getLinearVelocity();
-        final Vec2 vb = jbBodyB.getLinearVelocity();
-        final double rvx = va.x - vb.x;
-        final double rvy = va.y - vb.y;
-        final double rv = Math.sqrt(rvx * rvx + rvy * rvy);
-        final double pa = rv * jbBodyB.m_mass;
-        final double pb = rv * jbBodyA.m_mass;
-        final Body bodyA = (Body) contact.m_fixtureA.m_body.m_userData;
-        final Body bodyB = (Body) contact.m_fixtureB.m_body.m_userData;
-        if (bodyA.fatigueThreshold <= pa) {
-            bodyA.fatigue += pa;
-        }
-
-        if (bodyB.fatigueThreshold <= pb) {
-            bodyB.fatigue += pb;
-        }
+        final org.jbox2d.dynamics.Body jbBodyA = contact.m_fixtureA.m_body;
+        final org.jbox2d.dynamics.Body jbBodyB = contact.m_fixtureB.m_body;
+        final PhysicsBodyImp bodyA = (PhysicsBodyImp) jbBodyA.m_userData;
+        final PhysicsBodyImp bodyB = (PhysicsBodyImp) jbBodyB.m_userData;
+//        if (bodyA.isDestructible() || bodyB.isDestructible()) {
+//            final Vec2 va = jbBodyA.getLinearVelocity();
+//            final Vec2 vb = jbBodyB.getLinearVelocity();
+//            final double rvx = va.x - vb.x;
+//            final double rvy = va.y - vb.y;
+//            final double rv = Math.sqrt(rvx * rvx + rvy * rvy);
+//            final double pa = rv * jbBodyB.m_mass;
+//            final double pb = rv * jbBodyA.m_mass;
+//            if (bodyA.isDestructible() && bodyA.getFatigueThreshold() <= pa) {
+//                bodyA.fatigue += pa;
+//            }
+//
+//            if (bodyB.isDestructible() && bodyB.getFatigueThreshold() <= pb) {
+//                bodyB.fatigue += pb;
+//            }
+//        }
     }
 
     @Override
     public void endContact(final Contact contact) {
-        final Body bodyA = (Body) contact.m_fixtureA.m_body.m_userData;
-        final Body bodyB = (Body) contact.m_fixtureB.m_body.m_userData;
+        final PhysicsBodyImp bodyA = (PhysicsBodyImp) contact.m_fixtureA.m_body.m_userData;
+        final PhysicsBodyImp bodyB = (PhysicsBodyImp) contact.m_fixtureB.m_body.m_userData;
     }
 
     @Override
